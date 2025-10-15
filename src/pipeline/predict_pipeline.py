@@ -10,16 +10,34 @@ class PredictPipeline:
 
     def predict(self, features):
         try:
+            print("Starting prediction...")
             model_path = os.path.join('artifacts', 'model.pkl')
             preprocessor_path = os.path.join('artifacts', 'preprocessor.pkl')
+            print(f"Loading model from {model_path}")
             model = load_object(model_path)
+            print("Model loaded.")
             preprocessor = load_object(preprocessor_path)
+            print("Preprocessor loaded.")
             data_scaled = preprocessor.transform(features)
             preds = model.predict(data_scaled)
+            print("Prediction successful.")
             return preds
-
         except Exception as e:
+            print(f"Prediction failed: {e}")
             raise CustomException(e, sys)
+    
+    # def predict(self, features):
+    #     try:
+    #         model_path = os.path.join('artifacts', 'model.pkl')
+    #         preprocessor_path = os.path.join('artifacts', 'preprocessor.pkl')
+    #         model = load_object(model_path)
+    #         preprocessor = load_object(preprocessor_path)
+    #         data_scaled = preprocessor.transform(features)
+    #         preds = model.predict(data_scaled)
+    #         return preds
+
+    #     except Exception as e:
+    #         raise CustomException(e, sys)
 
 class CustomData:
     def __init__(self, gender, race_ethnicity, parental_level_of_education, lunch, test_preparation_course, reading_score, writing_score):
@@ -45,5 +63,7 @@ class CustomData:
             return pd.DataFrame(custom_data_input_dict)
 
         except Exception as e:
-            raise CustomException(e, sys)
+            print(f"Prediction error: {e}")
+            raise e
+
 
