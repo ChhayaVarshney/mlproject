@@ -3,13 +3,18 @@ import numpy as np
 import pandas as pd 
 import os
 
-from src.pipeline.predict_pipeline import CustomData, PredictPipeline
+print("DEBUG: Starting imports", flush=True)
+
+try:
+    from src.pipeline.predict_pipeline import CustomData, PredictPipeline
+    print("DEBUG: Imports successful", flush=True)
+except Exception as e:
+    import traceback
+    print("ERROR: Import failed", flush=True)
+    traceback.print_exc()
 
 application = Flask(__name__)
-
-@application.route('/')
-def index():
-    return render_template('index.html')
+print("DEBUG: Flask app created", flush=True)
 
 @application.route('/predictdata', methods=['GET', 'POST'])
 def predict_datapoint():
@@ -18,26 +23,29 @@ def predict_datapoint():
     else:
         print("DEBUG: /predictdata POST route reached", flush=True)
         try:
-            data = CustomData(
-                gender=request.form.get('gender'),
-                race_ethnicity=request.form.get('race_ethnicity'),
-                parental_level_of_education=request.form.get('parental_level_of_education'),
-                lunch=request.form.get('lunch'),
-                test_preparation_course=request.form.get('test_preparation_course'),
-                reading_score=request.form.get('reading_score'),
-                writing_score=request.form.get('writing_score')
-            )
+            # data = CustomData(
+            #     gender=request.form.get('gender'),
+            #     race_ethnicity=request.form.get('race_ethnicity'),
+            #     parental_level_of_education=request.form.get('parental_level_of_education'),
+            #     lunch=request.form.get('lunch'),
+            #     test_preparation_course=request.form.get('test_preparation_course'),
+            #     reading_score=request.form.get('reading_score'),
+            #     writing_score=request.form.get('writing_score')
+            # )
 
-            print("DEBUG: CustomData created", flush=True)
-            pred_df = data.get_data_as_data_frame()
-            print("DEBUG: DataFrame created", flush=True)
+            # print("DEBUG: CustomData created", flush=True)
+            # pred_df = data.get_data_as_data_frame()
+            # print("DEBUG: DataFrame created", flush=True)
 
-            predict_pipeline = PredictPipeline()
-            print("DEBUG: PredictPipeline initialized", flush=True)
+            # predict_pipeline = PredictPipeline()
+            # print("DEBUG: PredictPipeline initialized", flush=True)
 
-            results = predict_pipeline.predict(pred_df)
-            print("DEBUG: Prediction complete", flush=True)
-            return render_template('home.html', result=results)
+            # results = predict_pipeline.predict(pred_df)
+            # print("DEBUG: Prediction complete", flush=True)
+            # return render_template('home.html', result=results)
+
+            print("DEBUG: Prediction skipped", flush=True)
+            return render_template('home.html', result="Fake prediction OK")
 
         except Exception as e:
             import traceback
