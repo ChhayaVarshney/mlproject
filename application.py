@@ -2,15 +2,10 @@ from flask import Flask, request, render_template
 import numpy as np
 import pandas as pd 
 import os
-import logging
 
 from src.pipeline.predict_pipeline import CustomData, PredictPipeline
 
 application = Flask(__name__)
-
-# Ensure logs are sent to EB's log stream
-application.logger.addHandler(logging.StreamHandler(sys.stdout))
-application.logger.setLevel(logging.INFO)
 
 @application.route('/')
 def index():
@@ -20,31 +15,37 @@ def index():
 def predict_datapoint():
     if request.method == 'GET':
         return render_template('home.html')
-    
     else:
+        print("DEBUG: /predictdata POST route reached", flush=True)
         try:
             data = CustomData(
-                gender = request.form.get('gender'),
-                race_ethnicity = request.form.get('race_ethnicity'),
-                parental_level_of_education = request.form.get('parental_level_of_education'),
-                lunch = request.form.get('lunch'),
-                test_preparation_course = request.form.get('test_preparation_course'),
-                reading_score = request.form.get('reading_score'),
-                writing_score = request.form.get('writing_score')
+                gender=request.form.get('gender'),
+                race_ethnicity=request.form.get('race_ethnicity'),
+                parental_level_of_education=request.form.get('parental_level_of_education'),
+                lunch=request.form.get('lunch'),
+                test_preparation_course=request.form.get('test_preparation_course'),
+                reading_score=request.form.get('reading_score'),
+                writing_score=request.form.get('writing_score')
             )
 
+            print("DEBUG: CustomData created", flush=True)
             pred_df = data.get_data_as_data_frame()
+            print("DEBUG: DataFrame created", flush=True)
+
             predict_pipeline = PredictPipeline()
+            print("DEBUG: PredictPipeline initialized", flush=True)
+
             results = predict_pipeline.predict(pred_df)
+            print("DEBUG: Prediction complete", flush=True)
             return render_template('home.html', result=results)
 
         except Exception as e:
             import traceback
-            application.logger.error("Error occurred during prediction", exc_info=True)
+            print("ERROR: Exception in /predictdata", flush=True)
+            traceback.print_exc()
             return render_template('home.html', result=f"Error: {e}")
 
 
-
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8080))
+    port = int(os.environ.get("PORT", 5000))
     application.run(host="0.0.0.0", port=port)
