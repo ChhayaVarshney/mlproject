@@ -2,10 +2,15 @@ from flask import Flask, request, render_template
 import numpy as np
 import pandas as pd 
 import os
+import logging
 
 from src.pipeline.predict_pipeline import CustomData, PredictPipeline
 
 application = Flask(__name__)
+
+# Ensure logs are sent to EB's log stream
+application.logger.addHandler(logging.StreamHandler(sys.stdout))
+application.logger.setLevel(logging.INFO)
 
 @application.route('/')
 def index():
@@ -31,13 +36,13 @@ def predict_datapoint():
             pred_df = data.get_data_as_data_frame()
             predict_pipeline = PredictPipeline()
             results = predict_pipeline.predict(pred_df)
-            return render_template('home.html', result = results)
-        
+            return render_template('home.html', result=results)
+
         except Exception as e:
             import traceback
-            print("Error:", e)
-            traceback.print_exc()
-            return render_template('home.html', result="Error: " + str(e))
+            application.logger.error("Error occurred during prediction", exc_info=True)
+            return render_template('home.html', result=f"Error: {e}")
+
 
 
 if __name__ == "__main__":
