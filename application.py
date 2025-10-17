@@ -1,15 +1,19 @@
 from flask import Flask, request, render_template
 import numpy as np
-import pandas as pd 
+import pandas as pd
 import os
+import sys
+import traceback
+
+# ✅ Add src/ to the Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'src')))
 
 print("DEBUG: Starting imports", flush=True)
 
 try:
-    from src.pipeline.predict_pipeline import CustomData, PredictPipeline
+    from pipeline.predict_pipeline import CustomData, PredictPipeline
     print("DEBUG: Imports successful", flush=True)
 except Exception as e:
-    import traceback
     print("ERROR: Import failed", flush=True)
     traceback.print_exc()
 
@@ -23,6 +27,7 @@ def predict_datapoint():
     else:
         print("DEBUG: /predictdata POST route reached", flush=True)
         try:
+            # Uncomment below once the pipeline is stable
             # data = CustomData(
             #     gender=request.form.get('gender'),
             #     race_ethnicity=request.form.get('race_ethnicity'),
@@ -33,26 +38,18 @@ def predict_datapoint():
             #     writing_score=request.form.get('writing_score')
             # )
 
-            # print("DEBUG: CustomData created", flush=True)
             # pred_df = data.get_data_as_data_frame()
-            # print("DEBUG: DataFrame created", flush=True)
-
             # predict_pipeline = PredictPipeline()
-            # print("DEBUG: PredictPipeline initialized", flush=True)
-
             # results = predict_pipeline.predict(pred_df)
-            # print("DEBUG: Prediction complete", flush=True)
             # return render_template('home.html', result=results)
 
             print("DEBUG: Prediction skipped", flush=True)
             return render_template('home.html', result="Fake prediction OK")
 
         except Exception as e:
-            import traceback
             print("ERROR: Exception in /predictdata", flush=True)
             traceback.print_exc()
             return render_template('home.html', result=f"Error: {e}")
-
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
