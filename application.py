@@ -44,9 +44,14 @@ def predict_datapoint():
             logger.exception("ERROR: Exception in /predictdata")
             return render_template('home.html', result=f"Error: {e}")
 
+@application.route('/')
+def index():
+    return "App is running.", 200
+
 @application.route('/healthcheck')
 def healthcheck():
     return "OK", 200
+
 
 
 if __name__ == "__main__":
