@@ -29,20 +29,23 @@ def predict_datapoint():
     if request.method == 'GET':
         return render_template('home.html')
     else:
-        logger.debug("DEBUG: /predictdata POST route reached")
+        logger.debug("DEBUG: /predictdata POST request received")
         try:
-            # data = CustomData(...)
-            # pred_df = data.get_data_as_data_frame()
-            # predict_pipeline = PredictPipeline()
-            # results = predict_pipeline.predict(pred_df)
-            # return render_template('home.html', result=results)
+            form_data = request.form.to_dict()
+            logger.debug(f"Form Data: {form_data}")
 
-            logger.debug("DEBUG: Prediction skipped")
+            # If using CustomData and PredictPipeline:
+            # data = CustomData(**form_data)
+            # pred_df = data.get_data_as_data_frame()
+            # pipeline = PredictPipeline()
+            # result = pipeline.predict(pred_df)
+
             return render_template('home.html', result="Fake prediction OK")
 
         except Exception as e:
-            logger.exception("ERROR: Exception in /predictdata")
-            return render_template('home.html', result=f"Error: {e}")
+            logger.exception("ERROR during prediction processing")
+            return render_template('home.html', result=f"Error occurred: {e}")
+
 
 @application.route('/')
 def index():
@@ -56,4 +59,5 @@ def healthcheck():
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    application.run(host="0.0.0.0", port=port)
+    application.run(host="0.0.0.0", port=port, debug=True)  # Add debug=True
+
