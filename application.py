@@ -97,15 +97,15 @@ def predict_datapoint():
         logger.debug("DEBUG: POST /predictdata reached")
         try:
             form_data = request.form.to_dict()
-            logger.debug(f"Form Data: {form_data}")
+            logger.debug(f"DEBUG: Form Data Received: {form_data}")
 
-            # No real model prediction here
-            result = "Fake prediction OK"
-            return render_template('home.html', result=result)
+            # Just return the received data as response for now
+            return f"DEBUG: Received form data: {form_data}", 200
 
         except Exception as e:
             logger.exception("ERROR: Exception in POST /predictdata")
-            return render_template('home.html', result=f"Error occurred: {e}")
+            return f"Internal server error: {e}", 500
+
 
 
 if __name__ == "__main__":
