@@ -90,19 +90,23 @@ def healthcheck():
 
 @application.route('/predictdata', methods=['GET', 'POST'])
 def predict_datapoint():
-    logger.debug("DEBUG: /predictdata route triggered")
-    try:
-        if request.method == 'GET':
-            logger.debug("DEBUG: GET method detected")
-            return render_template('home.html')
-        else:
-            logger.debug("DEBUG: POST method detected")
+    logger.debug("DEBUG: GET or POST /predictdata reached")
+    if request.method == 'GET':
+        logger.debug("DEBUG: Serving home.html template")
+        return render_template('home.html')
+    else:
+        try:
             form_data = request.form.to_dict()
-            logger.debug(f"DEBUG: Form Data: {form_data}")
-            return f"Form received: {form_data}", 200
-    except Exception as e:
-        logger.exception("ERROR: Exception in /predictdata route")
-        return f"Internal server error: {e}", 500
+            logger.debug(f"DEBUG: Received form data: {form_data}")
+            return f"Received: {form_data}", 200
+        except Exception as e:
+            logger.exception("ERROR: In POST /predictdata")
+            return f"Internal Server Error: {e}", 500
+
+@application.route('/testtemplate')
+def test_template():
+    return render_template('home.html')
+
 
 
 if __name__ == "__main__":
