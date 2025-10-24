@@ -17,7 +17,7 @@ joblib==1.4.2
 kiwisolver==1.4.7
 MarkupSafe==2.1.5
 matplotlib==3.7.5
--e .
+#-e .
 narwhals==1.42.1
 numpy==1.24.4
 packaging==25.0
