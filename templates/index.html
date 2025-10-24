@@ -1,1 +1,40 @@
-<h1> Get your maths score predicted by giving some information </h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Exam Performance Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 100px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        .button {
+            background-color: #007BFF;
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            text-align: center;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Get your maths score predicted by giving some information</h1>
+
+    <form action="{{ url_for('predict_datapoint') }}">
+        <button type="submit" class="button">Go to Prediction Page</button>
+    </form>
+
+</body>
+</html>
