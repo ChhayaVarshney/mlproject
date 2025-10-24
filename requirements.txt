@@ -34,5 +34,5 @@ six==1.17.0
 threadpoolctl==3.5.0
 tzdata==2025.2
 Werkzeug==3.0.6
-#xgboost==2.1.4
+xgboost==2.1.4
 zipp==3.20.2
