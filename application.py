@@ -10,7 +10,21 @@ application = Flask(__name__)
 # ✅ Health check route (for GitHub deployment testing)
 @application.route('/health')
 def health_check():
-    return "✅ Deployment successful! App is running fine."
+    model_path = os.path.join('artifacts', 'model.pkl')
+    preprocessor_path = os.path.join('artifacts', 'preprocessor.pkl')
+
+    model_exists = os.path.exists(model_path)
+    preprocessor_exists = os.path.exists(preprocessor_path)
+
+    if model_exists and preprocessor_exists:
+        return "✅ Deployment successful! Model and preprocessor files found."
+    elif not model_exists and not preprocessor_exists:
+        return "⚠️ App is running, but model and preprocessor files are missing."
+    elif not model_exists:
+        return "⚠️ App is running, but model file is missing."
+    else:
+        return "⚠️ App is running, but preprocessor file is missing."
+
 
 @application.route('/')
 def index():
