@@ -7,6 +7,11 @@ from src.pipeline.predict_pipeline import CustomData, PredictPipeline
 
 application = Flask(__name__)
 
+# ✅ Health check route (for GitHub deployment testing)
+@application.route('/health')
+def health_check():
+    return "✅ Deployment successful! App is running fine."
+
 @application.route('/')
 def index():
     return render_template('index.html')
